@@ -8,14 +8,16 @@ import Footer from "./components/Footer.jsx";
 
 export default function App() {
   return (
-    <div className="bg-background min-h-screen pt-16 pb-16">
+    <div className="bg-background min-h-screen flex flex-col pt-16">
       <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/videos" element={<Videos />} />
-        <Route path="/preview/:filename" element={<Preview />} />
-        <Route path="/export" element={<Export />} />
-      </Routes>
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/videos" element={<Videos />} />
+          <Route path="/preview/:filename" element={<Preview />} />
+          <Route path="/export" element={<Export />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

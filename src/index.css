@@ -8,6 +8,10 @@
   --color-accent: #B27729;
 }
 
+html {
+  @apply bg-background;
+}
+
 :root {
   background-color: var(--color-secondary);
 }
