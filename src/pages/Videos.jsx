@@ -4,18 +4,26 @@ import { getVideos } from '../mockApi.js';
 export default function Videos() {
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         getVideos().then((data) => {
             setVideos(data)
             setLoading(false)
         
-        });
+        }).catch((err) => {
+            setError(err.message);
+            setLoading(false);
+        });;
     }, []);
 
-        if (loading) {
+    if (loading) {
         return <p>Loading videos...</p>;
-        }
+    }
+
+    if (error) {
+        return <p>Could not load videos: {error}</p>;
+    }
 
     return (
         <div>
