@@ -3,7 +3,8 @@ import Home from './pages/Home.jsx';
 import Videos from './pages/Videos.jsx';
 import Preview from './pages/Preview.jsx';
 import Export from './pages/Export.jsx';
-import Nav from "./components/Nav.jsx"
+import Nav from "./components/Nav.jsx";
+import Footer from "./components/Footer.jsx";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/preview/:filename" element={<Preview />} />
         <Route path="/export" element={<Export />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
