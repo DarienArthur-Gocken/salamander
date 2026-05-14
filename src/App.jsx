@@ -8,7 +8,7 @@ import Footer from "./components/Footer.jsx";
 
 export default function App() {
   return (
-    <div>
+    <div className="bg-background min-h-screen pt-16 pb-16">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />

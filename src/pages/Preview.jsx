@@ -4,10 +4,10 @@ export default function Preview() {
     const { filename } = useParams();
 
     return (
-        <div>
-            <h1>Preview: {filename}</h1>
-            <p>Thumbnail and tuning controls will go here in a future pair program.</p>
-            <Link to="/videos">Back to videos</Link>
+        <div className="p-6">
+            <h1 className="text-2xl font-bold text-primary mb-4">Preview: {filename}</h1>
+            <p className="text-text mb-4">Thumbnail and tuning controls will go here in a future pair program.</p>
+            <Link to="/videos" className="text-text hover:text-primary">Back to videos</Link>
         </div>
     );
 }

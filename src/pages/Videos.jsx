@@ -19,20 +19,20 @@ export default function Videos() {
     }, []);
 
     if (loading) {
-        return <p>Loading videos...</p>;
+        return <p className="text-text">Loading videos...</p>;
     }
 
     if (error) {
-        return <p>Could not load videos: {error}</p>;
+        return <p className="text-text">Could not load videos: {error}</p>;
     }
 
     return (
-        <div>
-            <h1>Available Videos</h1>
-            <ul>
+        <div className="p-6">
+            <h1 className="text-2xl font-bold text-primary mb-4">Available Videos</h1>
+            <ul className="list-disc pl-5">
                 {videos.map((filename) => (
-                    <li key={filename}>
-                        <Link to={`/preview/${filename}`}>{filename}</Link>
+                    <li key={filename} className="mb-2">
+                        <Link to={`/preview/${filename}`} className="text-text hover:text-primary">{filename}</Link>
                     </li>
                 ))}
             </ul>
