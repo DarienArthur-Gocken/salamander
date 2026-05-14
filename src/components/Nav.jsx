@@ -11,14 +11,6 @@ export default function Nav() {
                 <Link to="/videos" className="text-text font-medium hover:text-primary transition duration-300">
                     Videos
                 </Link>
-
-                <Link to="/preview/test.mp4" className="text-text font-medium hover:text-primary transition duration-300">
-                    Preview
-                </Link>
-
-                <Link to="/export" className="text-text font-medium hover:text-primary transition duration-300">
-                    Export
-                </Link>
             </div>
         </nav>
     )
