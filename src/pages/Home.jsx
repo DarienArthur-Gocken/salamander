@@ -4,7 +4,7 @@ export default function Home() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
             
-            <h1 className="text-4xl font-bold text-primary mb-4">
+            <h1 className="text-4xl font-bold color-text mb-4">
                 Salamander Tracker
             </h1>
 
