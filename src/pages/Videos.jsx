@@ -37,12 +37,12 @@ export default function Videos() {
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-text text-center mb-6">
+            <h1 className="text-3xl font-bold text-text text-center mb-6 pt-8">
                 Available Videos
             </h1>
             <div className="overflow-hidden rounded-2xl shadow-lg bg-secondary">
                 <table className="w-full table-fixed text-left">
-                    <thead className="bg-primary text-white">
+                    <thead className="bg-text text-white">
                         <tr>
                             <th className="p-4 w-1/12">#</th>
                             <th className="p-4 w-6/12">Filename</th>
@@ -63,11 +63,10 @@ export default function Videos() {
                                 <td className="p-4 text-text truncate">
                                     {filename}
                                 </td>
-
                                 <td className="p-4 text-center">
                                     <Link
                                         to={`/preview/${filename}`}
-                                        className="inline-block px-5 py-2 rounded-full bg-primary text-white font-medium hover:opacity-90 hover:-translate-y-0.5 transition">
+                                        className="inline-block px-4 py-2 rounded bg-primary text-white hover:brightness-95 transition">
                                         Preview
                                     </Link>
                                 </td>
@@ -75,7 +74,7 @@ export default function Videos() {
                                 <td className="p-4 text-center">
                                     <Link
                                         to={`/preview/${filename}`}
-                                        className=" inline-block px-5 py-2 rounded-full bg-accent text-white font-medium hover:opacity-90 hover:-translate-y-0.5 transition">
+                                        className="inline-block px-4 py-2 rounded bg-accent text-white hover:brightness-95 transition">
                                         Latest
                                     </Link>
                                 </td>

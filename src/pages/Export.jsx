@@ -42,8 +42,7 @@ export default function Export() {
                     <p className="text-text text-lg">Export Complete!</p>
                     <a
                         href={`/downloads/${filename}`}
-                        className="px-6 py-2 bg-primary text-white font-medium rounded-full hover:scale-105 hover:opacity-90 transition"
-                    >
+                        className="inline-block px-4 py-2 rounded bg-primary text-white hover:brightness-95 transition">
                         Download {filename}.csv
                     </a>
                 </div>
