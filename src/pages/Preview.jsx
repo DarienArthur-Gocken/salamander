@@ -7,11 +7,20 @@ export default function Preview() {
 
     const [thumbnail, setThumbnail] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [error, setError] = useState(null);
+    
     useEffect(() => {
+        setLoading(true);
+        setError(null);
+
         getThumbnail(filename)
             .then((data) => {
                 setThumbnail(data);
+            })
+            .catch((err) => {
+                setError(err.message);
+            })
+            .finally(() => {
                 setLoading(false);
             });
     }, [filename]);
@@ -24,15 +33,29 @@ export default function Preview() {
 
             <div className="bg-secondary rounded-2xl shadow-lg p-6">
                 <div className="bg-background/40 rounded-xl h-80 flex items-center justify-center mb-6 overflow-hidden">
+
                     {loading ? (
                         <p className="text-text font-medium">
                             Loading preview...
                         </p>
+
+                    ) : error ? (
+                        <div className="text-center">
+                            <p className="text-red-500 font-semibold mb-2">
+                                Failed to load thumbnail
+                            </p>
+
+                            <p className="text-text/70 text-sm">
+                                {error}
+                            </p>
+                        </div>
+
                     ) : (
                         <img
                             src={thumbnail}
                             alt={filename}
-                            className="w-full h-full object-cover" />
+                            className="w-full h-full object-cover"
+                        />
                     )}
                 </div>
 
