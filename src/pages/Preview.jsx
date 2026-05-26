@@ -13,6 +13,8 @@ export default function Preview() {
     const [tolerance, setTolerance] = useState(0);
 
     const canvasRef = useRef(null);
+    const imgRef = useRef(null);
+    const [imageReady, setImageReady] = useState(false);
 
 
     useEffect(() => {
@@ -30,6 +32,19 @@ export default function Preview() {
                 setLoading(false);
             });
     }, [filename]);
+
+    useEffect(() => {
+        if (!thumbnail) return;
+        setImageReady(false);
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            imgRef.current = img;
+            setImageReady(true);
+            //console.log('image loaded:', imgRef.current.naturalWidth, 'x', imgRef.current.naturalHeight)
+        };
+        img.src = thumbnail;
+        }, [thumbnail]);
 
     function setColorRange(e) {
         setColor(e.target.value);
