@@ -44,7 +44,19 @@ export default function Preview() {
             //console.log('image loaded:', imgRef.current.naturalWidth, 'x', imgRef.current.naturalHeight)
         };
         img.src = thumbnail;
-        }, [thumbnail]);
+    }, [thumbnail]);
+
+    useEffect(() => {
+        if (!imageReady) return;
+        const img = imgRef.current;
+        const canvas = canvasRef.current;
+        if (!img || !canvas) return;
+
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+    }, [imageReady, color, tolerance]);
 
     function setColorRange(e) {
         setColor(e.target.value);
