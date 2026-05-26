@@ -56,6 +56,51 @@ export default function Preview() {
         canvas.height = img.naturalHeight;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const px = data.data;
+
+        function hexToRGB(hex) {
+            if (!hex) return [0, 0, 0];
+
+            const clean = hex.replace('#', '');
+
+            const red = parseInt(clean.substring(0, 2), 16);
+            const green = parseInt(clean.substring(2, 4), 16);
+            const blue = parseInt(clean.substring(4, 6), 16);
+
+            return [red, green, blue];
+        }
+
+        function euclideanColorDist(r1, g1, b1, r2, g2, b2) {
+            const red = r1 - r2;
+            const green = g1 - g2;
+            const blue = b1 - b2;
+
+            return Math.sqrt(red * red + green * green + blue * blue);
+        }
+
+        for (let i = 0; i < px.length; i += 4) {
+            const red = px[i];
+            const green = px[i + 1];
+            const blue = px[i + 2];
+
+            const [targetRed, targetGreen, targetBlue] = hexToRGB(color);
+
+            const distance = euclideanColorDist(red, green, blue, targetRed, targetGreen, targetBlue);
+            if (distance > tolerance) {
+                //black
+                px[i] = 0;
+                px[i + 1] = 0;
+                px[i + 2] = 0;
+            } else {
+                //white
+                px[i] = 255;
+                px[i + 1] = 255;
+                px[i + 2] = 255;
+            }
+        }
+
+        ctx.putImageData(data, 0, 0);
     }, [imageReady, color, tolerance]);
 
     function setColorRange(e) {
