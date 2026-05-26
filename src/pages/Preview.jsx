@@ -142,11 +142,11 @@ export default function Preview() {
                         <img
                             src={thumbnail}
                             alt={filename}
-                            className="w-full h-full object-cover"
+                            className="w-1/2 h-full object-cover transition-opacity duration-500"
                         />
                     )}
 
-                    <canvas ref={canvasRef} />
+                    <canvas ref={canvasRef} className="w-1/2 h-full transition-opacity duration-500"/>
                 </div>
 
                 <h2 className="text-lg font-semibold text-text mb-4">
