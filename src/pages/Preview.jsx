@@ -8,7 +8,10 @@ export default function Preview() {
     const [thumbnail, setThumbnail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
+    const [color, setColor] = useState(null);
+    const [tolerance, setTolerance] = useState(0);
+
     useEffect(() => {
         setLoading(true);
         setError(null);
@@ -24,6 +27,16 @@ export default function Preview() {
                 setLoading(false);
             });
     }, [filename]);
+
+    function setColorRange(e) {
+        setColor(e.target.value);
+        console.log(e.target.value)
+    }
+
+    function handleThreshold(e) {
+        setTolerance(e.target.value);
+        console.log(e.target.value)
+    }
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
@@ -58,6 +71,9 @@ export default function Preview() {
                         />
                     )}
                 </div>
+
+                <input type="color" onChange={setColorRange}></input>
+                <input type="range" onChange={handleThreshold}></input>
 
                 <div className="flex justify-center gap-4">
                     <Link
