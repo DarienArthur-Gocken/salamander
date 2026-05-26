@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { getThumbnail } from '../mockApi.js';
 
 export default function Preview() {
@@ -11,6 +11,9 @@ export default function Preview() {
 
     const [color, setColor] = useState(null);
     const [tolerance, setTolerance] = useState(0);
+
+    const canvasRef = useRef(null);
+
 
     useEffect(() => {
         setLoading(true);
@@ -70,6 +73,8 @@ export default function Preview() {
                             className="w-full h-full object-cover"
                         />
                     )}
+
+                    <canvas ref={canvasRef} />
                 </div>
 
                 <input type="color" onChange={setColorRange}></input>
