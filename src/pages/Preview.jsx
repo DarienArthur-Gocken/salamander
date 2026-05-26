@@ -9,7 +9,7 @@ export default function Preview() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [color, setColor] = useState(null);
+    const [color, setColor] = useState('#000000');
     const [tolerance, setTolerance] = useState(0);
 
     const canvasRef = useRef(null);
@@ -109,7 +109,7 @@ export default function Preview() {
     }
 
     function handleThreshold(e) {
-        setTolerance(e.target.value);
+        setTolerance(Number(e.target.value));
         console.log(e.target.value)
     }
 
@@ -149,8 +149,36 @@ export default function Preview() {
                     <canvas ref={canvasRef} />
                 </div>
 
-                <input type="color" onChange={setColorRange}></input>
-                <input type="range" onChange={handleThreshold}></input>
+                <h2 className="text-lg font-semibold text-text mb-4">
+                    Image Settings
+                </h2>
+                <div className="flex items-end gap-6">
+                    <label className="flex items-center gap-3">
+                        <input
+                            type="color"
+                            value={color}
+                            onChange={setColorRange}
+                            className="w-14 h-10 cursor-pointer rounded-md border border-text/20 bg-white p-1"
+                        />
+                    </label>
+
+                    <label className="flex-1 flex flex-col gap-2">
+                        <div className="flex justify-between">
+                            <span className="text-sm text-text/60">
+                                {tolerance}
+                            </span>
+                        </div>
+
+                        <input
+                            type="range"
+                            min="0"
+                            max="255"
+                            value={tolerance}
+                            onChange={handleThreshold}
+                            className="w-full cursor-pointer accent-primary"
+                        />
+                    </label>
+                </div>
 
                 <div className="flex justify-center gap-4">
                     <Link
