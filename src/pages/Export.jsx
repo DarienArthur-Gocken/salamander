@@ -6,19 +6,37 @@ export default function Export() {
     const { jobId } = useParams();
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
+    const [downloadPath, setDownloadPath] = useState(null);
 
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
                 const status = await getJobStatus(jobId);
                 setProgress(status.progress || 0);
-                if (status.complete) {
+
+                const filepath =
+                    typeof status.result === 'string'
+                        ? status.result
+                        : status.result?.filepath;
+
+                if (filepath) {
+                    setDownloadPath(filepath);
+                }
+
+                if (status.status === 'error') {
+                    setError(status.error || 'Job failed');
                     clearInterval(interval);
+                    return;
+                }
+
+                if (status.status === 'done' || status.complete) {
                     setProgress(100);
+                    clearInterval(interval);
                 }
             } catch (err) {
                 console.error('Failed to get job status:', err);
                 setError(err.message);
+                clearInterval(interval);
             }
         }, 500);
 
@@ -51,7 +69,7 @@ export default function Export() {
                 <div className="flex flex-col items-center gap-4">
                     <p className="text-text text-lg">Export Complete!</p>
                     <a
-                        href={`/downloads/${jobId}`}
+                        href={downloadPath ?? `/download/${jobId}`}
                         className="inline-block px-4 py-2 rounded bg-primary text-white hover:brightness-95 transition">
                         Download Result
                     </a>
