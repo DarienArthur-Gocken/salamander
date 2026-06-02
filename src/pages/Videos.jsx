@@ -47,7 +47,7 @@ export default function Videos() {
                             <th className="p-4 w-1/12">#</th>
                             <th className="p-4 w-6/12">Filename</th>
                             <th className="p-4 w-2/12 text-center">Preview</th>
-                            <th className="p-4 w-3/12 text-center">Latest</th>
+                            {/* <th className="p-4 w-3/12 text-center">Latest</th> */}
                         </tr>
                     </thead>
 
@@ -70,14 +70,14 @@ export default function Videos() {
                                         Preview
                                     </Link>
                                 </td>
-
+{/* 
                                 <td className="p-4 text-center">
                                     <Link
                                         to={`/preview/${filename}`}
                                         className="inline-block px-4 py-2 rounded bg-accent text-white hover:brightness-95 transition">
                                         Latest
                                     </Link>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>
