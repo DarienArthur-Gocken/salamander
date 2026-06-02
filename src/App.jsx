@@ -15,7 +15,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/preview/:filename" element={<Preview />} />
-          <Route path="/export/:filename" element={<Export />} />
+          <Route path="/export/:jobId" element={<Export />} />
         </Routes>
       </div>
       <Footer />

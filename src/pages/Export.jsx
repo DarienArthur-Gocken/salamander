@@ -1,33 +1,43 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getJobStatus } from '../api.js';
 
 export default function Export() {
-    const { filename } = useParams();
+    const { jobId } = useParams();
     const [progress, setProgress] = useState(0);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        //FAKE PROGRESS PATCH LATER
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 95) return prev;
-                return prev + Math.random() * 15;
-            });
+        const interval = setInterval(async () => {
+            try {
+                const status = await getJobStatus(jobId);
+                setProgress(status.progress || 0);
+                if (status.complete) {
+                    clearInterval(interval);
+                    setProgress(100);
+                }
+            } catch (err) {
+                console.error('Failed to get job status:', err);
+                setError(err.message);
+            }
         }, 500);
 
-        const completeTimer = setTimeout(() => {
-            setProgress(100);
-        }, 5000);
-
-        return () => {
-            clearInterval(interval);
-            clearTimeout(completeTimer);
-        };
-    }, []);
+        return () => clearInterval(interval);
+    }, [jobId]);
 
     return (
         <div className="p-6 flex flex-col items-center justify-center min-h-96">
-            <h1 className="text-2xl font-bold text-primary mb-4">Exporting: {filename}</h1>
-            {progress < 100 ? (
+            <h1 className="text-2xl font-bold text-primary mb-4">Exporting...</h1>
+            {error ? (
+                <div className="text-center">
+                    <p className="text-red-500 font-semibold mb-2">
+                        Export Failed
+                    </p>
+                    <p className="text-text/70 text-sm">
+                        {error}
+                    </p>
+                </div>
+            ) : progress < 100 ? (
                 <div className="w-full max-w-md">
                     <div className="bg-secondary rounded-full h-4 overflow-hidden">
                         <div
@@ -41,9 +51,9 @@ export default function Export() {
                 <div className="flex flex-col items-center gap-4">
                     <p className="text-text text-lg">Export Complete!</p>
                     <a
-                        href={`/downloads/${filename}`}
+                        href={`/downloads/${jobId}`}
                         className="inline-block px-4 py-2 rounded bg-primary text-white hover:brightness-95 transition">
-                        Download {filename}.csv
+                        Download Result
                     </a>
                 </div>
             )}

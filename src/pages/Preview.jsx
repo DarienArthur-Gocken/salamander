@@ -1,9 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
-import { getThumbnail } from '../api.js';
+import { getThumbnail, submitProcessingJob } from '../api.js';
 
 export default function Preview() {
     const { filename } = useParams();
+    const navigate = useNavigate();
 
     const [thumbnail, setThumbnail] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -11,6 +12,7 @@ export default function Preview() {
 
     const [color, setColor] = useState('#000000');
     const [tolerance, setTolerance] = useState(0);
+    const [exporting, setExporting] = useState(false);
 
     const canvasRef = useRef(null);
     const imgRef = useRef(null);
@@ -113,6 +115,17 @@ export default function Preview() {
         console.log(e.target.value)
     }
 
+    async function handleExport() {
+        setExporting(true);
+        try {
+            const result = await submitProcessingJob(filename, color, tolerance);
+            navigate(`/export/${result.jobId}`);
+        } catch (err) {
+            console.error('Failed to start export:', err);
+            setExporting(false);
+        }
+    }
+
     return (
         <div className="p-6 max-w-4xl mx-auto">
             <h1 className="text-3xl font-bold text-text text-center mb-6 pt-8">
@@ -187,11 +200,12 @@ export default function Preview() {
                         Back to Videos
                     </Link>
 
-                    <Link
-                        to={`/export/${filename}`}
-                        className="inline-block px-4 py-2 rounded bg-accent text-white hover:brightness-95 transition">
-                        Export
-                    </Link>
+                    <button
+                        onClick={handleExport}
+                        disabled={exporting}
+                        className="inline-block px-4 py-2 rounded bg-accent text-white hover:brightness-95 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        {exporting ? 'Starting Export...' : 'Export'}
+                    </button>
                 </div>
             </div>
         </div>
