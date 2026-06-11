@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div className="bg-background min-h-screen flex flex-col pt-16">
       <Nav />
-      <div className="flex-grow">
+      <div className="grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/videos" element={<Videos />} />
