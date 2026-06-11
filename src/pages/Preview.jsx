@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { getThumbnail, submitProcessingJob } from '../api.js';
 
 export default function Preview() {
@@ -12,11 +12,10 @@ export default function Preview() {
 
     const [color, setColor] = useState('#000000');
     const [tolerance, setTolerance] = useState(0);
-    const [exporting, setExporting] = useState(false);
+    const [submitState, setSubmitState] = useState('idle');
+    const [submitMessage, setSubmitMessage] = useState('');
 
     const canvasRef = useRef(null);
-    const imgRef = useRef(null);
-    const [imageReady, setImageReady] = useState(false);
 
     function hexToRGB(hex) {
         if (!hex) return [0, 0, 0];
@@ -159,19 +158,33 @@ export default function Preview() {
     * for use in the preview canvas.
     */
     useEffect(() => {
-        setLoading(true);
-        setError(null);
+        let cancelled = false;
 
-        getThumbnail(filename)
-            .then((data) => {
-                setThumbnail(data);
-            })
-            .catch((err) => {
-                setError(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        const loadThumbnail = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const data = await getThumbnail(filename);
+                if (!cancelled) {
+                    setThumbnail(data);
+                }
+            } catch (err) {
+                if (!cancelled) {
+                    setError(err.message || 'Failed to load thumbnail');
+                }
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadThumbnail();
+
+        return () => {
+            cancelled = true;
+        };
     }, [filename]);
 
     /**
@@ -182,26 +195,7 @@ export default function Preview() {
     * identifies the largest connected region, and displays
     * a centroid marker over the detected object.
     */
-    useEffect(() => {
-        if (!thumbnail) return;
-
-        setImageReady(false);
-
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-
-        img.onload = () => {
-            imgRef.current = img;
-            setImageReady(true);
-        };
-
-        img.src = thumbnail;
-    }, [thumbnail]);
-
-    useEffect(() => {
-        if (!imageReady) return;
-
-        const img = imgRef.current;
+    const renderPreview = useCallback((img) => {
         const canvas = canvasRef.current;
 
         if (!img || !canvas) return;
@@ -210,6 +204,8 @@ export default function Preview() {
         canvas.height = img.naturalHeight;
 
         const ctx = canvas.getContext('2d');
+
+        if (!ctx) return;
 
         ctx.drawImage(img, 0, 0);
 
@@ -254,7 +250,20 @@ export default function Preview() {
         if (centroid) {
             drawCentroidDot(ctx, centroid);
         }
-    }, [imageReady, color, tolerance]);
+    }, [color, tolerance]);
+
+    useEffect(() => {
+        if (!thumbnail) return;
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        img.onload = () => {
+            renderPreview(img);
+        };
+
+        img.src = thumbnail;
+    }, [thumbnail, renderPreview]);
 
     /**
     * Updates the selected target color used when
@@ -280,14 +289,24 @@ export default function Preview() {
     * to the export page.
     */
     async function handleExport() {
-        setExporting(true);
+        setSubmitState('submitting');
+        setSubmitMessage('Submitting your processing job…');
 
         try {
             const result = await submitProcessingJob(filename, color, tolerance);
-            navigate(`/export/${result.jobId}`);
+            setSubmitState('submitted');
+            setSubmitMessage(`Job ${result.jobId} started. Tracking progress…`);
+            navigate(`/export/${result.jobId}`, {
+                state: {
+                    filename,
+                    targetColor: color,
+                    threshold: tolerance,
+                },
+            });
         } catch (err) {
             console.error('Failed to start export:', err);
-            setExporting(false);
+            setSubmitState('error');
+            setSubmitMessage(err.message || 'Unable to start the processing job.');
         }
     }
 
@@ -366,10 +385,22 @@ export default function Preview() {
 
                     <button
                         onClick={handleExport}
-                        disabled={exporting}
+                        disabled={submitState === 'submitting'}
                         className="inline-block px-4 py-2 rounded bg-accent text-white hover:brightness-95 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                        {exporting ? 'Starting Export...' : 'Export'}
+                        {submitState === 'submitting'
+                            ? 'Submitting…'
+                            : 'Process Video with These Settings'}
                     </button>
+                </div>
+
+                <div className="mt-4 rounded-xl border border-secondary/80 bg-background/30 p-4 text-sm text-text/80">
+                    {submitState === 'error' ? (
+                        <p className="text-red-700">{submitMessage}</p>
+                    ) : submitState === 'submitted' ? (
+                        <p className="text-primary">{submitMessage}</p>
+                    ) : (
+                        <p>{submitMessage || 'Choose a color and threshold, then submit the job to start tracking the detection run.'}</p>
+                    )}
                 </div>
             </div>
         </div>
