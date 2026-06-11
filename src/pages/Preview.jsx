@@ -292,13 +292,13 @@ export default function Preview() {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="p-6 max-w-6xl mx-auto">
             <h1 className="text-3xl font-bold text-text text-center mb-6 pt-8">
                 Preview: {filename}
             </h1>
 
             <div className="bg-secondary rounded-2xl shadow-lg p-6">
-                <div className="bg-background/40 rounded-xl h-80 flex items-center justify-center mb-6 overflow-hidden">
+                <div className="bg-background/40 rounded-xl flex items-center justify-center gap-4 mb-6 p-4">
                     {loading ? (
                         <p className="text-text font-medium">
                             Loading preview...
@@ -314,15 +314,17 @@ export default function Preview() {
                             </p>
                         </div>
                     ) : (
-                        <img
-                            src={thumbnail}
-                            alt={filename}
-                            className="w-1/2 h-full object-cover transition-opacity duration-500"/>
-                    )}
+                        <>
+                            <img
+                                src={thumbnail}
+                                alt={filename}
+                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500"/>
 
-                    <canvas
-                        ref={canvasRef}
-                        className="w-1/2 h-full transition-opacity duration-500"/>
+                            <canvas
+                                ref={canvasRef}
+                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500"/>
+                        </>
+                    )}
                 </div>
 
                 <h2 className="text-lg font-semibold text-text mb-4">
