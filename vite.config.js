@@ -10,6 +10,8 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
       '/thumbnail': 'http://localhost:3000',
       '/process': 'http://localhost:3000',
+      '/latest': 'http://localhost:3000',
+      '/metadata': 'http://localhost:3000',
       '/results': 'http://localhost:3000',
       '/download': 'http://localhost:3000',
     },
