@@ -15,6 +15,8 @@ export default function Preview() {
     const [submitState, setSubmitState] = useState('idle');
     const [submitMessage, setSubmitMessage] = useState('');
 
+    const [frameInterval, setFrameInterval] = useState(5);
+
     const canvasRef = useRef(null);
 
     function hexToRGB(hex) {
@@ -283,6 +285,20 @@ export default function Preview() {
         console.log(e.target.value);
     }
 
+    function handleFrameInterval(e) {
+        let value = Number(e.target.value);
+
+        if (value < 1) {
+            value = 1;
+        }
+
+        if (value > 15) {
+            value = 15;
+        }
+
+        setFrameInterval(value);
+    }
+
     /**
     * Starts a processing job using the selected
     * color and tolerance settings and navigates
@@ -293,7 +309,7 @@ export default function Preview() {
         setSubmitMessage('Submitting your processing job…');
 
         try {
-            const result = await submitProcessingJob(filename, color, tolerance);
+            const result = await submitProcessingJob(filename, color, tolerance, frameInterval);
             setSubmitState('submitted');
             setSubmitMessage(`Job ${result.jobId} started. Tracking progress…`);
             navigate(`/export/${result.jobId}`, {
@@ -301,6 +317,7 @@ export default function Preview() {
                     filename,
                     targetColor: color,
                     threshold: tolerance,
+                    frameInterval
                 },
             });
         } catch (err) {
@@ -337,11 +354,11 @@ export default function Preview() {
                             <img
                                 src={thumbnail}
                                 alt={filename}
-                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500"/>
+                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500" />
 
                             <canvas
                                 ref={canvasRef}
-                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500"/>
+                                className="max-w-[48%] h-auto object-contain transition-opacity duration-500" />
                         </>
                     )}
                 </div>
@@ -356,7 +373,7 @@ export default function Preview() {
                             type="color"
                             value={color}
                             onChange={setColorRange}
-                            className="w-14 h-10 cursor-pointer rounded-md border border-text/20 bg-white p-1"/>
+                            className="w-14 h-10 cursor-pointer rounded-md border border-text/20 bg-white p-1" />
                     </label>
 
                     <label className="flex-1 flex flex-col gap-2">
@@ -372,7 +389,22 @@ export default function Preview() {
                             max="255"
                             value={tolerance}
                             onChange={handleThreshold}
-                            className="w-full cursor-pointer accent-primary"/>
+                            className="w-full cursor-pointer accent-primary" />
+                    </label>
+
+                    <label className="flex flex-col gap-2">
+                        <span className="text-sm text-text/60">
+                            Process every {frameInterval} frame(s)
+                        </span>
+
+                        <input
+                            type="number"
+                            min="1"
+                            max="15"
+                            value={frameInterval}
+                            onChange={handleFrameInterval}
+                            className="w-24 rounded border border-text/20 px-2 py-1"
+                        />
                     </label>
                 </div>
 

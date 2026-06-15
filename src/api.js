@@ -15,10 +15,10 @@ export async function getThumbnail(filename) {
     return url;
 }
 
-export async function submitProcessingJob(filename, targetColor, threshold) {
+export async function submitProcessingJob(filename, targetColor, threshold, frameInterval) {
     const hex = targetColor.replace('#', '');
     const res = await fetch(
-        `/process/${filename}?targetColor=${hex}&threshold=${threshold}`,
+        `/process/${filename}?targetColor=${hex}&threshold=${threshold}&frameInterval=${frameInterval}`,
         { method: 'POST' }
     );
     if (!res.ok) {
