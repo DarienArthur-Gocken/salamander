@@ -4,13 +4,14 @@
 Darien Arthur-Gocken & Lilian Nguyen
 
 ## Project Overview:
-Salamander Tracker is a full-stack web application that allows users to analyze salamander videos by selecting a target color and tolerance threshold. The application generates a binary image preview showing detected regions and exports centroid tracking data as a CSV file for further analysis. 
+Salamander Tracker is a full-stack web application that allows users to analyze salamander videos by selecting a target color, tolerance threshold, and frame interval. The application generates a binary image preview showing detected regions and exports centroid tracking data as a CSV file for further analysis. 
 
 Users can: 
 - Browse available salamander videos
 - Preview a video frame before processing
 - Select a target color using a color picker
 - Adjust the color tolerance threshold
+- Adjust the frame interval used during processing
 - View a binary image representation of the detected regions
 - Display the centroid of the largest detected region
 - Export tracking results as a CSV file
@@ -63,6 +64,23 @@ How to Use:
 2. Locate the desired video in the list.
 3. Click the latest button.
 4. The application will display the most recently generated centroid tracking results for that video. 
+
+### Adjustable Frame Interval 
+Users can choose how frequently video frames are processed during centroid tracking. 
+
+Lower values process more frames and provide more detailed tracking data. While higher values process fewer frames and complete processing quicker. 
+
+How to Use:
+1. Navigate to the Preview page for a video.
+2. Select a target color and threshold.
+3. Enter a frame interval value between 1 and 15.
+4. Click Export.
+5. The processor will analyze every nth frame based on the selected interval.
+
+Examples:
+- 1 = Process every frame (most accurate)
+- 5 = Process every 5th frame
+- 15 = Process every 15th frame (fastest)
 
 ### Links to Repository:
 - Frontend: https://github.com/DarienArthur-Gocken/salamander
