@@ -34,7 +34,8 @@ The processor is responsible for analyzing video frames and generating centroid 
 
 ### Build the Processor
 - Navigate to the processor directory: `cd processor`
-- Build the project: `mvn clean package`
+- Build the processor JAR: `mvn clean package -DskipTests`
+    - The videoProcessingTest uses a local sample video that is not included in the repository. So, tests may fail in a clean clone unless the sample video is added manually.
 - It will then generate the jar file
 
 ### Server Setup
