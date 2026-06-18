@@ -431,7 +431,7 @@ export default function Preview() {
                     ) : submitState === 'submitted' ? (
                         <p className="text-primary">{submitMessage}</p>
                     ) : (
-                        <p>{submitMessage || 'Choose a color and threshold, then submit the job to start tracking the detection run.'}</p>
+                        <p>{submitMessage || 'Choose a color, threshold, and frame interval, then submit the job to start tracking the detection run.'}</p>
                     )}
                 </div>
             </div>
